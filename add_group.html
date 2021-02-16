@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Тестирующая система системный администратор</title>
+		<meta http-equiv = "Content-Type" charset = "cp1251">
+		<link type = "text/css" rel = "stylesheet" href = "styles/style_system_admins.css">
+	</head>
+	<body>
+		<div id = "container">
+			<p id = "sysadmin"><output class = "name"></output></p>
+			<p id = "type_person">Системный администратор</p>
+		</div>
+		
+		<div id = "arrowTop" title = "Наверх"></div>
+		
+		<script src = "js/button_up.js"></script>
+		
+		<div id = "content">
+			<form action = "add_group" method = "post">
+				<h2>Название:</h2>
+				<input type = "text" name = "new_group" placeholder = "Название" class = "new_group">
+				<h2>ФИО преподавателя:</h2>
+				<input type = "text" name = "name_teacher" placeholder = "ФИО преподавателя" class = "name_teacher">
+				<h2>Студенты:</h2>
+				<input type = "text" name = "name_student" placeholder = "Студенты" class = "name_student">
+				<div class = "btn_add_student" title = "Добавить студента"></div>
+				
+				<button type = "submit" class = "btn">Добавить группу</button>
+			</form>
+		</div>
+			
+		<footer><div class = "hr"></div>&copy;2021 Designed by Shukaylo Ekaterina</footer>
+	</body>
+</html>
