@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Тестирующая система системный администратор</title>
+		<meta http-equiv = "Content-Type" charset = "cp1251">
+		<link type = "text/css" rel = "stylesheet" href = "styles/style_all_people.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+		<script src="js/query.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id = "container">
+			<p id = "sysadmin"><output name = "name_person" class = "name"></output></p>
+			<p id = "type_person">Системный администратор</p>
+		</div>
+		<div id = "content">
+			<h1>Группы</h1>
+			<form action = "" method="post" id="ajax_form">
+				<input type = "text" name = "find_group" placeholder = "Найти группу">
+				<button class="dropdown-item btn" id="btn">Найти</button>
+            </form>
+		</div>
+		<div id="result_form"></div> 
+		<a href = "add_person.html"><button type = "submit" class = "btn">Добавить студента</button></a>
+	</body>
+</html>
