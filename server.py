@@ -226,6 +226,24 @@ class myHandler(BaseHTTPRequestHandler):
             var find_group = arguments[0];
             document.getElementById('1').innerHTML = find_group;
             """, find_group)
+            
+            self.send_response(302)
+            self.send_header('Location', FileToOpen)
+            self.end_headers()
+            from bs4 import BeautifulSoup
+            with open("html/all_groups.html", "r") as f:
+                '''contents = f.read()
+                soup = BeautifulSoup(contents, 'lxml')
+                tag = soup.find("div", id="result_form")
+                tag.replace_with("2")
+                print(soup.find("div", id="result_form"))'''
+                markup = '<div id="result_form">1</div> '
+                soup = BeautifulSoup(markup)
+                soup.div
+                new_tag = soup.new_tag('div')
+                new_tag = '2'
+                new_tag.string = soup.div.string
+                soup.font.replace_with(new_tag)
 
         if path == "/find_teacher":
             FileToOpen = 'all_teachers.html'
