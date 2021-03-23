@@ -211,8 +211,12 @@ class myHandler(BaseHTTPRequestHandler):
         
         if path == "/find_group":
             FileToOpen = 'all_groups.html'
+            self.send_response(302)
+            self.send_header('Location', FileToOpen)
+            self.end_headers()
             find_group = fields[1]
-            cursor.execute("SELECT * FROM %s" % (find_group))
+            print(find_group)
+            '''cursor.execute("SELECT * FROM %s" % (find_group))
             #cursor.execute("SELECT * FROM groups WHERE name LIKE '%s'" % (find_group))
             results = cursor.fetchall()
             print(results)
@@ -226,25 +230,37 @@ class myHandler(BaseHTTPRequestHandler):
             var find_group = arguments[0];
             document.getElementById('1').innerHTML = find_group;
             """, find_group)
-            
-            self.send_response(302)
-            self.send_header('Location', FileToOpen)
-            self.end_headers()
+            '''
+            #url = 'http://localhost:8081/all_groups.html'
+            #page = requests.get(url)
+            #import requests as req
+            #resp = req.get(url)
+            #print(resp.text)
+            #print(resp.status_code)
             from bs4 import BeautifulSoup
+            print(1)
             with open("html/all_groups.html", "r") as f:
-                '''contents = f.read()
+                page = f.read()
+                print(page)
+                soup = BeautifulSoup(page, 'html.parser')
+                tag = soup.find("div", id="result_form")
+                tag.replace_with("MMM")
+                print(2)
+            '''with open("html/all_groups.html", "r") as f:
+                contents = f.read()
                 soup = BeautifulSoup(contents, 'html.parser')
                 tag = soup.find("div", id="result_form")
                 tag.replace_with("2")
-                print(soup.find("div", id="result_form"))'''
-                markup = '<div id="result_form">1</div> '
+                print(soup.find("div", id="result_form"))
+                
+                markup = '<div id="result_form">1</div>'
                 soup = BeautifulSoup(markup)
                 soup.div
                 new_tag = soup.new_tag('div')
                 new_tag = '2'
                 new_tag.string = soup.div.string
                 soup.div.replace_with(new_tag)
-                print(soup.div.prettify())
+                print(soup.div.prettify())'''
 
         if path == "/find_teacher":
             FileToOpen = 'all_teachers.html'
