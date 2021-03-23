@@ -233,7 +233,7 @@ class myHandler(BaseHTTPRequestHandler):
             from bs4 import BeautifulSoup
             with open("html/all_groups.html", "r") as f:
                 '''contents = f.read()
-                soup = BeautifulSoup(contents, 'lxml')
+                soup = BeautifulSoup(contents, 'html.parser')
                 tag = soup.find("div", id="result_form")
                 tag.replace_with("2")
                 print(soup.find("div", id="result_form"))'''
@@ -243,7 +243,8 @@ class myHandler(BaseHTTPRequestHandler):
                 new_tag = soup.new_tag('div')
                 new_tag = '2'
                 new_tag.string = soup.div.string
-                soup.font.replace_with(new_tag)
+                soup.div.replace_with(new_tag)
+                print(soup.div.prettify())
 
         if path == "/find_teacher":
             FileToOpen = 'all_teachers.html'
