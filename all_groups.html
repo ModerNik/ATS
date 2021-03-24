@@ -1,25 +1,36 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Тестирующая система системный администратор</title>
+		<title>РўРµСЃС‚РёСЂСѓСЋС‰Р°СЏ СЃРёСЃС‚РµРјР° СЃРёСЃС‚РµРјРЅС‹Р№ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ</title>
+		<style>
+			@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+		</style>
 		<meta http-equiv = "Content-Type" charset = "cp1251">
 		<link type = "text/css" rel = "stylesheet" href = "styles/style_all_people.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
-		<script src="js/query.js" type="text/javascript"></script>
+		<script src="js/getit.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div id = "container">
-			<p id = "sysadmin"><output name = "name_person" class = "name"></output></p>
-			<p id = "type_person">Системный администратор</p>
+			<table id = "table">
+				<tr>
+					<th><a  href = "add_person.html">Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ</a></th>
+					<th><a  href = "all_groups.html">Р“СЂСѓРїРїС‹</a></th>
+					<th><a  href = "all_teachers.html">РџСЂРµРїРѕРґР°РІР°С‚РµР»Рё</a></th>
+					<th><a  href = "all_students.html">РЎС‚СѓРґРµРЅС‚С‹</a></th>
+					<th id = "sysadmin" colspan="2"><p><output name = "name_person" class = "name"></output></p><p><a  href = "system_admins.html" id = "type_person">РЎРёСЃС‚РµРјРЅС‹Р№ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ</a></p></th>
+				</tr>
+			</table>
 		</div>
 		<div id = "content">
-			<h1>Группы</h1>
-			<form action = "" method="post" id="ajax_form">
-				<input type = "text" name = "find_group" placeholder = "Найти группу">
-				<button class="dropdown-item btn" id="btn">Найти</button>
+			<h1>Р“СЂСѓРїРїС‹</h1>
+			<form method="post">
+				<input type = "text" name = "find_group" placeholder = "РќР°Р№С‚Рё РіСЂСѓРїРїСѓ">
+				<button class="dropdown-item btn" id="btn">РќР°Р№С‚Рё</button>
             </form>
 		</div>
-		<div id="result_form"></div> 
-		<a href = "add_person.html"><button type = "submit" class = "btn">Добавить студента</button></a>
+		<table id="result_form">
+		</table>
+		<a href = "add_group.html"><button type = "submit" class = "btn">Р”РѕР±Р°РІРёС‚СЊ РіСЂСѓРїРїСѓ</button></a>
 	</body>
 </html>
