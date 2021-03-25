@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Тестирующая система преподаватель</title>
+		<title>РўРµСЃС‚РёСЂСѓСЋС‰Р°СЏ СЃРёСЃС‚РµРјР° РїСЂРµРїРѕРґР°РІР°С‚РµР»СЊ</title>
 		<meta http-equiv = "Content-Type" charset = "cp1251">
-		<link type = "text/css" rel = "stylesheet" href = "styles/style_teachers.css">
+		<link type = "text/css" rel = "stylesheet" href = "styles/all.css">
 	</head>
 	<body>
 		<div id = "container">
-			<p id = "name_group"><output class = "group"></output></p>
-			<p id = "teacher"><output class = "name"></output></p>
-			<p id = "type_person">Преподаватель</p>
+			<p id = "name_group"><output name = "name_group" class = "group"></output></p>
+			<p id = "teacher"><output name = "name_person" class = "name"></output></p>
+			<p id = "type_person">РџСЂРµРїРѕРґР°РІР°С‚РµР»СЊ</p>
 		</div>
-		
-		<div id = "arrowTop" title = "РќР°РІРµСЂС…"></div>
-		
-		<script src = "js/button_up.js"></script>
-		
 		<div id = "content">
-			<h1>Учебный план:</h1>
-			/*Здесь должен быть учебный план*/
+			<h1 id = "plan">РЈС‡РµР±РЅС‹Р№ РїР»Р°РЅ:</h1>
+			<button type = "button" id = "btn1">Р”РѕР±Р°РІРёС‚СЊ С‚РµРјСѓ</button>
+			<form action = "add_plan" id = "hidden" method = "post">
+				<h1>РќРѕРјРµСЂ С‚РµСЃС‚Р°:<input name = "number"></h1>
+				<h1>Р“СЂСѓРїРїР°:<input name = "group"></h1>
+				<h1>Р”Р°С‚Р° РїСЂРѕРІРµРґРµРЅРёСЏ СЂР°Р±РѕС‚С‹:<input type="date" name = "date"></h1>
+				<button type = "submit" id = "hidden_btn">Р”РѕР±Р°РІРёС‚СЊ</button>
+			</form>
+			<script src = "js/show_form.js"></script>
 		</div>
-			
-		<footer><div class = "hr"></div>&copy;2021 Designed by Shukaylo Ekaterina</footer>
 	</body>
 </html>
