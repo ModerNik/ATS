@@ -1,10 +1,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import requests
-import re
-from selenium import webdriver
 import mysql.connector
 import mysql
-import json
+import re
+import random
 from mysql.connector import Error
 #designed by apple in california (oleg in blyatskoi school)
 def create_connection(host_name, user_name, user_password, db_name):
@@ -27,9 +25,12 @@ cursor = connection.cursor()
 cursor.execute("SET NAMES cp1251")
 cursor.execute("set character set cp1251")
 
+user = ""
+status = ""
+
 class myHandler(BaseHTTPRequestHandler):
 
-    def OpenHtmlLocation(self, url):
+    '''def OpenHtmlLocation(self, url):
         self.send_response(200)
         self.send_header('Content-type', 'text/html; charset=cp1251')
         self.end_headers()
@@ -38,7 +39,7 @@ class myHandler(BaseHTTPRequestHandler):
         message = file.read()
         file.close()
         self.wfile.write(bytes(message, "cp1251"))
-        return
+        return'''
     
     def do_GET(self):
         self.send_response(200)
@@ -67,7 +68,6 @@ class myHandler(BaseHTTPRequestHandler):
                 file = open("html" + path, 'r')
             print(file)
         except FileNotFoundError:
-            
             file  = open("html/404.html", 'r')
         #self.send_header('charset', 'utf-8')
         self.end_headers()
@@ -112,6 +112,7 @@ class myHandler(BaseHTTPRequestHandler):
                     pasw = row[1]
                     status = row[2]
                     name = row[3]
+                user = name
                 if password == pasw:
                     if status == "admin":
                         FileToOpen = '/system_admins.html'
@@ -126,6 +127,8 @@ class myHandler(BaseHTTPRequestHandler):
             self.send_response(302)
             self.send_header('Location', FileToOpen)
             self.end_headers()
+            print(user)
+            print(status)
             return
         
         if path == "/add_person":
@@ -175,29 +178,42 @@ class myHandler(BaseHTTPRequestHandler):
             FileToOpen = 'add_group.html'
             group2 = fields[1]
             name_student = fields[3]
-            name_student = name_teacher.replace('+', ' ');
+            name_student = name_teacher.replace('+', ' ')
             cursor.execute("INSERT INTO %s VALUES ('%s')" % (group2, name_student))
 
         if path == "/add_group_to_teacher":
             FileToOpen = 'add_group.html'
             group = fields[1]
             name_teacher = fields[3]
-            name_teacher = name_teacher.replace('+', ' ');
+            name_teacher = name_teacher.replace('+', ' ')
             cursor.execute("UPDATE teachers SET groups=concat_ws(',', groups, '%s') where name = '%s'" % (group, name_teacher))
-
+            connection.commit()
+            
+        if path == "/add_plan":
+            FileToOpen = 'academic_plan.html'
+            number = fields[1]
+            group = fields[3]
+            date = fields[5]
+            print(date)
+            cursor.execute("INSERT INTO plans VALUES(%s, '%s', '%s')" % (number, group, date))
+            connection.commit()
+            self.send_response(302)
+            self.send_header('Location', FileToOpen)
+            self.end_headers()
+            
         if path == "/add_question":
             FileToOpen = 'add_question.html'
             name = fields[1]
-            name = name.replace('+', ' ');
+            name = name.replace('+', ' ')
             group = fields[3]
             problem = fields[5]
-            problem = problem.replace('+', ' ');
+            problem = problem.replace('+', ' ')
             v1 = fields[7]
-            v1 = v1.replace('+', ' ');
+            v1 = v1.replace('+', ' ')
             v2 = fields[9]
-            v2 = v2.replace('+', ' ');
+            v2 = v2.replace('+', ' ')
             v3 = fields[11]
-            v3 = v3.replace('+', ' ');
+            v3 = v3.replace('+', ' ')
             v4 = fields[13]
             v4 = v4.replace('+', ' ');
             answer = feilds[15]
@@ -207,67 +223,119 @@ class myHandler(BaseHTTPRequestHandler):
             for row in results:
                 sub = row[0]
             cursor.execute("INSERT INTO questions VALUES(0, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %s, '%s')" % (sub, name, group, problem, v1, v2, v3, v4, answer, teacher))
-
+            connection.commit()
         
         if path == "/find_group":
             FileToOpen = 'all_groups.html'
-            self.send_response(302)
-            self.send_header('Location', FileToOpen)
-            self.end_headers()
             find_group = fields[1]
-            print(find_group)
-            '''cursor.execute("SELECT * FROM %s" % (find_group))
+            cursor.execute("SELECT * FROM %s" % (find_group))
             #cursor.execute("SELECT * FROM groups WHERE name LIKE '%s'" % (find_group))
             results = cursor.fetchall()
             print(results)
             self.send_response(302)
             self.send_header('Location', FileToOpen)
             self.end_headers()
-            from webdriver_manager.chrome import ChromeDriverManager
-            driver = webdriver.Chrome(ChromeDriverManager().install())
-            driver.get("http://localhost:8081/all_groups.html")
-            driver.execute_script("""
-            var find_group = arguments[0];
-            document.getElementById('1').innerHTML = find_group;
-            """, find_group)
-            '''
-            #url = 'http://localhost:8081/all_groups.html'
-            #page = requests.get(url)
-            #import requests as req
-            #resp = req.get(url)
-            #print(resp.text)
-            #print(resp.status_code)
-            from bs4 import BeautifulSoup
-            print(1)
-            with open("html/all_groups.html", "r") as f:
-                page = f.read()
-                print(page)
-                soup = BeautifulSoup(page, 'html.parser')
-                tag = soup.find("div", id="result_form")
-                tag.replace_with("MMM")
-                print(2)
-            '''with open("html/all_groups.html", "r") as f:
-                contents = f.read()
-                soup = BeautifulSoup(contents, 'html.parser')
-                tag = soup.find("div", id="result_form")
-                tag.replace_with("2")
-                print(soup.find("div", id="result_form"))
-                
-                markup = '<div id="result_form">1</div>'
-                soup = BeautifulSoup(markup)
-                soup.div
-                new_tag = soup.new_tag('div')
-                new_tag = '2'
-                new_tag.string = soup.div.string
-                soup.div.replace_with(new_tag)
-                print(soup.div.prettify())'''
-
+        
         if path == "/find_teacher":
             FileToOpen = 'all_teachers.html'
             find_teacher = fields[1]
-            curson.execute("SELECT * FROM teachers WHERE name LIKE '%s'" % (find_teacher))
+            cursor.execute("SELECT * FROM teachers WHERE name LIKE '%s'" % (find_teacher))
             results = cursor.fetchall()
-        
+
+        if path == "/generate_test":
+            FileToOpen = 'add_test.html'
+            name = fields[1]
+            group = fields[3]
+            size = fields[5]
+            cursor.execute("SELECT COUNT(*) FROM questions")
+            results = cursor.fetchall()
+            for row in results:
+                maximum = row[0]
+            user = "Oleg Detinkin"
+            cursor.execute("SELECT sub FROM teachers WHERE name='%s'" % (user))
+            results = cursor.fetchall()
+            for row in results:
+                subject = row[0]
+            if int(size) >= maximum:
+                print("недостаточно вопросов")
+            else:
+                rand = random.randint(1, maximum)
+                s += str(rand)
+                for i in range(int(size)-1):
+                    rand = random.randint(1, maximum)
+                    s += ","
+                    s += str(rand)
+                cursor.execute("INSERT INTO tests VALUES('%s', '%s', '%s', '%s', ('%s'), 0)" % (subject, name, group, user, s))
+                connection.commit()
+            self.send_response(302)
+            self.send_header('Location', FileToOpen)
+            self.end_headers()
+
+        if path == "/create_test":
+            FileToOpen = 'add_question.html'
+            name = fields[1]
+            group = fields[3]
+            user = "Oleg Detinkin"
+            cursor.execute("SELECT sub FROM teachers WHERE name='%s'" % (user))
+            results = cursor.fetchall()
+            for row in results:
+                subject = row[0]
+            s = "'"
+            self.send_response(302)
+            self.send_header('Location', FileToOpen)
+            self.end_headers()
+            
+        if path == "/add_question":
+            FileToOpen = 'add_question.html'
+            name = fields[1]
+            group = fields[3]
+            problem = fields[5]
+            v1 = fileds[7]
+            v2 = fileds[9]
+            v3 = fileds[11]
+            v4 = fileds[13]
+            answer = fields[15]
+            cursor.execute("SELECT sub FROM teachers WHERE name='%s'" % (user))
+            results = cursor.fetchall()
+            for row in results:
+                subject = row[0]
+            cursor.execute("INSERT INTO questions VELUES(0, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (subject, name, group, problem, v1, v2, v3, v4, answer, user))
+            connection.commit()
+            cursor.execute("SELECT COUNT(*) FROM questions")
+            results = cursor.fetchall()
+            for row in results:
+                maximum = row[0]
+            if s == "'":
+                s += maximum
+            else:
+                s += ','
+                s += maximum
+
+        if path == "/last_question":
+            FileToOpen = 'add_test.html'
+            s = "'"
+            cursor.execute("INSERT INTO tests VALUES('%s', '%s', '%s', '%s', (%s), 0)" % (subject, name, group, user, s))
+            connection.commit()
+
+
+        if path == "/create_question":
+            FileToOpen = 'create_question.html'
+            FileToOpen = 'add_question.html'
+            name = fields[1]
+            group = fields[3]
+            problem = fields[5]
+            v1 = fileds[7]
+            v2 = fileds[9]
+            v3 = fileds[11]
+            v4 = fileds[13]
+            answer = fields[15]
+            cursor.execute("SELECT sub FROM teachers WHERE name='%s'" % (user))
+            results = cursor.fetchall()
+            for row in results:
+                subject = row[0]
+            cursor.execute("INSERT INTO questions VELUES(0, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (subject, name, group, problem, v1, v2, v3, v4, answer, user))
+            connection.commit()
+
 
 server = HTTPServer(('127.0.0.1', 8081), myHandler)
 server.serve_forever()
