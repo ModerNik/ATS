@@ -28,6 +28,10 @@ cursor.execute("set character set cp1251")
 user = ""
 status = ""
 
+cursor.execute("SELECT id FROM questions WHERE class='%s'" % (1))
+results = cursor.fetchall()
+print(results[0])
+
 class myHandler(BaseHTTPRequestHandler):
 
     '''def OpenHtmlLocation(self, url):
@@ -190,7 +194,7 @@ class myHandler(BaseHTTPRequestHandler):
             connection.commit()
             
         if path == "/add_plan":
-            FileToOpen = 'academic_plan.html'
+            FileToOpen = 'teacher_plans.html'
             number = fields[1]
             group = fields[3]
             date = fields[5]
@@ -247,7 +251,7 @@ class myHandler(BaseHTTPRequestHandler):
             name = fields[1]
             group = fields[3]
             size = fields[5]
-            cursor.execute("SELECT COUNT(*) FROM questions")
+            cursor.execute("SELECT COUNT(*) FROM questions WHERE class='%s'" % (group))
             results = cursor.fetchall()
             for row in results:
                 maximum = row[0]
@@ -256,6 +260,9 @@ class myHandler(BaseHTTPRequestHandler):
             results = cursor.fetchall()
             for row in results:
                 subject = row[0]
+            cursor.execute("SELECT id FROM questions WHERE class='%s'" % (group))
+            results = cursor.fetchall()
+            print(results)
             if int(size) >= maximum:
                 print("недостаточно вопросов")
             else:
@@ -287,8 +294,8 @@ class myHandler(BaseHTTPRequestHandler):
             
         if path == "/add_question":
             FileToOpen = 'add_question.html'
-            name = fields[1]
-            group = fields[3]
+            name = fields[3]
+            group = fields[1]
             problem = fields[5]
             v1 = fileds[7]
             v2 = fileds[9]
@@ -313,6 +320,9 @@ class myHandler(BaseHTTPRequestHandler):
 
         if path == "/last_question":
             FileToOpen = 'add_test.html'
+            self.send_response(302)
+            self.send_header('Location', FileToOpen)
+            self.end_headers()
             s = "'"
             cursor.execute("INSERT INTO tests VALUES('%s', '%s', '%s', '%s', (%s), 0)" % (subject, name, group, user, s))
             connection.commit()
