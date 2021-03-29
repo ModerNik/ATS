@@ -271,7 +271,9 @@ class myHandler(BaseHTTPRequestHandler):
                 for i in range(int(size)-1):
                     rand = random.randint(1, maximum)
                     s += ","
-                    s += str(rand)
+                    s += str(results[rand-1])
+                    maximum -= 1
+                    #вырезать значение из массива
                 cursor.execute("INSERT INTO tests VALUES('%s', '%s', '%s', '%s', ('%s'), 0)" % (subject, name, group, user, s))
                 connection.commit()
             self.send_response(302)
