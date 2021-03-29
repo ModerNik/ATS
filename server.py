@@ -310,7 +310,7 @@ class myHandler(BaseHTTPRequestHandler):
                 subject = row[0]
             cursor.execute("INSERT INTO questions VELUES(0, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (subject, name, group, problem, v1, v2, v3, v4, answer, user))
             connection.commit()
-            cursor.execute("SELECT COUNT(*) FROM questions")
+            cursor.execute("SELECT COUNT(*) FROM questions WHERE class='%s'" % (group))
             results = cursor.fetchall()
             for row in results:
                 maximum = row[0]
