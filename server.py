@@ -273,7 +273,7 @@ class myHandler(BaseHTTPRequestHandler):
                     s += ","
                     s += str(results[rand-1])
                     maximum -= 1
-                    #вырезать значение из массива
+                    results.pop(rand-1)
                 cursor.execute("INSERT INTO tests VALUES('%s', '%s', '%s', '%s', ('%s'), 0)" % (subject, name, group, user, s))
                 connection.commit()
             self.send_response(302)
