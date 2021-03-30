@@ -331,8 +331,7 @@ class myHandler(BaseHTTPRequestHandler):
 
 
         if path == "/create_question":
-            FileToOpen = 'create_question.html'
-            FileToOpen = 'add_question.html'
+            FileToOpen = 'teacher_tests.html'
             name = fields[1]
             group = fields[3]
             problem = fields[5]
