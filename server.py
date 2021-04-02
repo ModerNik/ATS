@@ -28,10 +28,6 @@ cursor.execute("set character set cp1251")
 user = ""
 status = ""
 
-cursor.execute("SELECT id FROM questions WHERE class='%s'" % (1))
-results = cursor.fetchall()
-print(results[0])
-
 class myHandler(BaseHTTPRequestHandler):
 
     '''def OpenHtmlLocation(self, url):
