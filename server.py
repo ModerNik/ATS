@@ -3,6 +3,7 @@ import mysql.connector
 import mysql
 import re
 import random
+from selenium import webdriver
 from mysql.connector import Error
 #designed by apple in california (oleg in blyatskoi school)
 def create_connection(host_name, user_name, user_password, db_name):
@@ -16,7 +17,7 @@ def create_connection(host_name, user_name, user_password, db_name):
             charset= 'utf8',
             use_pure = True
         )
-        #print("Connection to MySQL DB successful")
+        print("Connection to MySQL DB successful")
     except Error as e:
         print(f"The error '{e}' occurred")
     return connection
@@ -30,7 +31,7 @@ status = ""
 
 class myHandler(BaseHTTPRequestHandler):
 
-    '''def OpenHtmlLocation(self, url):
+    def OpenHtmlLocation(self, url):
         self.send_response(200)
         self.send_header('Content-type', 'text/html; charset=cp1251')
         self.end_headers()
@@ -39,7 +40,7 @@ class myHandler(BaseHTTPRequestHandler):
         message = file.read()
         file.close()
         self.wfile.write(bytes(message, "cp1251"))
-        return'''
+        return
     
     def do_GET(self):
         self.send_response(200)
@@ -80,11 +81,7 @@ class myHandler(BaseHTTPRequestHandler):
         return
 
     def do_POST(self):
-        #self.send_response(301)
-        #self.send_header('Location','/support')
-        #self.end_headers()
         path = self.path
-
         #Парсим параметры запроса и сохраняем их в fields в виде последовательных пар "ключ", "значение"
         content_len = int(self.headers.get('Content-Length'))
         post = self.rfile.read(content_len)
@@ -115,13 +112,13 @@ class myHandler(BaseHTTPRequestHandler):
                 user = name
                 if password == pasw:
                     if status == "admin":
-                        FileToOpen = '/system_admins.html'
+                        FileToOpen = '/system_admin.html'
                     if status == "teacher":
-                        FileToOpen = '/teachers.html'
+                        FileToOpen = '/teacher.html'
                     if status == "ladmin":
                         FileToOpen = '/learning_admin.html'
                     if status == "student":
-                        FileToOpen = '/students.html'
+                        FileToOpen = '/student.html'
                 else:
                     print ("it's sad")
             self.send_response(302)
@@ -228,13 +225,21 @@ class myHandler(BaseHTTPRequestHandler):
         if path == "/find_group":
             FileToOpen = 'all_groups.html'
             find_group = fields[1]
+            print("НАЧЯЛЬ ДЕЛЯТЬ")
             cursor.execute("SELECT * FROM %s" % (find_group))
-            #cursor.execute("SELECT * FROM groups WHERE name LIKE '%s'" % (find_group))
             results = cursor.fetchall()
             print(results)
             self.send_response(302)
             self.send_header('Location', FileToOpen)
             self.end_headers()
+            #from webdriver_manager.chrome import ChromeDriverManager
+            #driver = webdriver_manager.chrome(ChromeDriverManager().install())
+            driver = webdriver.Chrome()
+            driver.get("http://localhost:8081/all_groups.html")
+            driver.execute_script("""
+            document.getElementById('result_form').innerHTML = "find_group";
+            """)
+            print("Я СДЕЛЯЛЬ")
         
         if path == "/find_teacher":
             FileToOpen = 'all_teachers.html'
